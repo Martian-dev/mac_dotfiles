@@ -1,0 +1,81 @@
+
+export ZSH="$HOME/.oh-my-zsh"
+
+# Which plugins would you like to load?
+
+# Standard plugins can be found in $ZSH/plugins/
+
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+
+# Add wisely, as too many plugins slow down shell startup.
+
+# Shell plugins are loaded from Homebrew below.
+
+# get machine's ip address
+
+alias ip="ipconfig getifaddr en0"
+
+# zsh shortcuts
+
+alias zshconfig="vim ~/.zshrc"
+alias zshsource="source ~/.zshrc"
+alias ohmyzsh="cd ~/.oh-my-zsh"
+
+# ssh shortcuts
+
+alias sshhome="cd ~/.ssh"
+alias sshconfig="vim ~/.ssh/config"
+
+# git shortcuts
+
+alias gitconfig="vim ~/.gitconfig"
+alias gits="git status"
+alias gitd="git diff"
+alias gitl="git lg"
+alias gita="git add ."
+alias gitc="cz commit"
+alias gitb="git branch --sort=-committerdate"
+
+# clear terminal
+
+alias c="clear"
+
+# eza as ls replacement
+
+alias ls="eza --long"
+
+# Claude Code shortcut
+
+alias cc="claude"
+
+# load zsh-completions
+
+# Extra completions must be on fpath before compinit.
+DOTFILES_BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
+fpath=("$DOTFILES_BREW_PREFIX/share/zsh-completions" $fpath)
+autoload -Uz compinit
+compinit
+
+# Load fzf before fzf-tab; highlighting belongs at the end.
+source <(fzf --zsh)
+source "$DOTFILES_BREW_PREFIX/opt/fzf-tab/share/fzf-tab/fzf-tab.zsh"
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:*' switch-group '<' '>'
+source "$DOTFILES_BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+# use nvm
+
+source "$DOTFILES_BREW_PREFIX/opt/nvm/nvm.sh"
+
+# use starship theme (needs to be at the end)
+
+eval "$(starship init zsh)"
+
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+source "$DOTFILES_BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

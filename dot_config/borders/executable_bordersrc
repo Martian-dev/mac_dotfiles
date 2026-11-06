@@ -1,0 +1,3 @@
+#!/bin/bash
+# bfpimentel/dotfiles: thin, rounded, white active borders.
+borders style=round width=1 hidpi=on order=above active_color=0xffffffff inactive_color=0xff414550
