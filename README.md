@@ -7,7 +7,7 @@ macOS shell, terminal and desktop configuration managed with chezmoi. No encrypt
 - Zsh: the existing Starship prompt and aliases, Homebrew completions, fzf shell integration, fzf-tab, autosuggestions and syntax highlighting.
 - Ghostty: Everforest dark medium, with Option+digits forwarded to tmux.
 - tmux: Everforest colors, default Ctrl+B prefix, default keybindings and zero-based window numbering. Option+0–9 switches windows. TPM, Resurrect and Continuum provide session saving/restoration.
-- AeroSpace: six persistent numbered workspaces, pybash1's shortcuts, bfpimentel's 8px gaps and horizontal tiling. A 40px top gap leaves room for SketchyBar.
+- AeroSpace: six persistent numbered workspaces, pybash1's shortcuts, bfpimentel's 8px gaps and horizontal tiling. A 40px top gap leaves room for SketchyBar. Ghostty stays tiled alongside other apps. Command+T opens an independent terminal window; use tmux for tabs within a window.
 - Karabiner: pybash1's Caps Lock → Command+Option+Control mapping, F4 → Escape, and Caps+D/N macros. His hardware-specific device entry is omitted.
 - SketchyBar: workspaces, current app, media, output device, volume, battery and clock. Dark gray translucent styling follows bfpimentel's current Halo palette; his current repo does not contain a SketchyBar config.
 - JankyBorders: bfpimentel's thin rounded white active borders.
@@ -53,6 +53,14 @@ Start terminal sessions with `tmux new -As main`. This does not automatically st
 In AeroSpace service mode, F toggles floating, R resets the layout, and Escape reloads the config and exits the mode. The imported Caps+D/N macros emit Option+Shift+K followed by 1/3; their effect depends on the receiving app.
 
 Continuum saves every 15 minutes while an attached tmux client renders the status bar and restores on tmux server startup. Restoration recovers session/window/pane structure and working directories; it is not a checkpoint of arbitrary running processes. Saved state stays outside Git in tmux-resurrect's local data directory.
+
+## Ghostty tabs and AeroSpace
+
+Ghostty remains tiled. Command+T opens a separate Ghostty window, like Command+N. Use tmux windows (Ctrl+B, then C; Option+0–9 to switch) for tabs within a terminal. tmux remains manually started.
+
+macOS exposes Ghostty native tabs as separate windows to AeroSpace, which can leave blank tiled areas. This is a [documented Ghostty/macOS limitation](https://ghostty.org/docs/help/macos-tiling-wms), not a duplicate shortcut. The suggested force-tiling workaround was tested on this Mac and did not resolve it. The native New Tab menu action still exists; avoid it while Ghostty is tiled.
+
+The desktop bar is a SketchyBar adaptation of bfpimentel's current Halo palette, not an exact copy of a historical desktop screenshot. Wallpaper, desktop widgets and Ghostty's native titlebar are independent visual settings.
 
 ## Update configs
 

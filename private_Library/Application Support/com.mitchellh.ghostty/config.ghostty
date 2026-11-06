@@ -66,3 +66,6 @@ keybind = alt+6=text:\x1b6
 keybind = alt+7=text:\x1b7
 keybind = alt+8=text:\x1b8
 keybind = alt+9=text:\x1b9
+
+# Use tmux for tabs; native macOS tabs are incompatible with AeroSpace tiling.
+keybind = super+t=new_window
