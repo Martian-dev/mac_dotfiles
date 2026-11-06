@@ -5,7 +5,7 @@ macOS shell, terminal and desktop configuration managed with chezmoi. No encrypt
 ## Included
 
 - Zsh: the existing Starship prompt and aliases, Homebrew completions, fzf shell integration, fzf-tab, autosuggestions and syntax highlighting.
-- Ghostty: Everforest dark medium, with Option+digits forwarded to tmux.
+- Ghostty: Everforest dark medium, hidden native titlebar, with Option+digits forwarded to tmux.
 - tmux: Everforest colors, default Ctrl+B prefix, default keybindings and zero-based window numbering. Option+0–9 switches windows. TPM, Resurrect and Continuum provide session saving/restoration.
 - AeroSpace: six persistent numbered workspaces, pybash1's shortcuts, bfpimentel's 8px gaps and horizontal tiling. The top gap accounts for the 44px bar plus display safe area, with 8px below the bar. Ghostty stays tiled alongside other apps. Command+T opens an independent terminal window; use tmux for tabs within a window.
 - Karabiner: pybash1's Caps Lock → Command+Option+Control mapping, F4 → Escape, and Caps+D/N macros. His hardware-specific device entry is omitted.
@@ -70,7 +70,7 @@ The bar recreates the visual components in [bfpimentel's Overview.tsx](https://g
 - Native app icons and SF Symbols are rendered locally through AppKit, with no downloaded icon assets. The battery ring and CPU sample data update live.
 - `helpers/render.swift` compiles into `~/.cache/sketchybar/render` when its source changes. Generated images and CPU samples also remain in that cache, outside Git. Homebrew's Xcode Command Line Tools provide Swift/AppKit; JetBrains Mono Nerd Font is included in the Brewfile.
 
-Wallpaper, desktop widgets and Ghostty's native titlebar are independent of this bar/window-manager styling.
+Ghostty's native titlebar is hidden for a minimal terminal appearance. This setting takes effect in new windows after a config reload; existing windows must be recreated to lose their titlebar. Wallpaper and desktop widgets are independent of the bar/window-manager styling.
 
 ## Update configs
 
