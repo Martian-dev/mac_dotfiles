@@ -4,7 +4,7 @@ macOS shell, terminal and desktop configuration managed with chezmoi. No encrypt
 
 ## Current desktop mode
 
-SketchyBar is paused and disabled at login; its configuration is retained for later. The native macOS menu bar stays visible. AeroSpace uses an 8px top gap below the system menu bar, and its SketchyBar callbacks are disabled. Ghostty has 12px horizontal and 8px vertical padding.
+SketchyBar is paused and disabled at login; its configuration is retained for later. The native macOS menu bar stays visible, with an Everforest charcoal-green (`#232a2e`) background provided by a small native AppKit helper. AeroSpace uses an 8px top gap below the system menu bar, and its SketchyBar callbacks are disabled. Ghostty has 12px horizontal and 8px vertical padding.
 
 ## Included
 
@@ -99,3 +99,17 @@ Backups from the initial setup are in `~/.local/state/mac-dotfiles-backup` on th
 - [pybash1/dotdotdot](https://github.com/pybash1/dotdotdot): AeroSpace shortcuts, Karabiner rules and tmux session workflow.
 - [bfpimentel/dotfiles](https://github.com/bfpimentel/dotfiles): AeroSpace spacing, borders and [Halo palette](https://github.com/bfpimentel/dotfiles/blob/main/dotfiles/halo/ui/theme.ts), adapted for SketchyBar.
 - [Everforest](https://github.com/sainnhe/everforest): terminal and tmux palette.
+
+## Native menu bar color
+
+`~/.config/menu-bar-tint/main.swift` provides an Everforest `#232a2e` surface behind the transparent native menu bar. The panel ignores mouse input, does not add menu items, and is not managed as a tiled window by AeroSpace. It preserves the wallpaper, native menus and system transparency preferences. No Accessibility permission or private macOS API is used.
+
+chezmoi compiles the helper to `~/.local/bin/menu-bar-tint` and starts it through the `local.menu-bar-tint` user LaunchAgent. It handles display changes and starts at login. The Swift source is tracked; the compiled binary and logs stay local.
+
+To disable the tint immediately, run:
+
+```sh
+launchctl bootout "gui/$(id -u)/local.menu-bar-tint"
+```
+
+Remove its LaunchAgent and setup script from chezmoi if disabling it permanently. Reapply the setup script to restore the tint.

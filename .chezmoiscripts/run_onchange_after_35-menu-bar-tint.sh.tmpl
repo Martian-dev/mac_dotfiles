@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+# Rebuild/restart the native menu bar tint when its source changes.
+# {{ include "dot_config/menu-bar-tint/main.swift" | sha256sum }}
+mkdir -p "$HOME/.local/bin"
+xcrun swiftc "$HOME/.config/menu-bar-tint/main.swift" -o "$HOME/.local/bin/menu-bar-tint"
+launchctl bootout "gui/$(id -u)/local.menu-bar-tint" 2>/dev/null || true
+launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/local.menu-bar-tint.plist"
