@@ -9,10 +9,8 @@ auto-reload-config = true
 persistent-workspaces = ["1", "2", "3", "4", "5", "6"]
 after-startup-command = []
 
-# Notify Sketchybar about workspace change
-exec-on-workspace-change = ['/bin/bash', '-c',
-    '/opt/homebrew/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-]
+# Native macOS menu bar is active; SketchyBar is paused.
+exec-on-workspace-change = []
 
 # Start AeroSpace at login
 start-at-login = true
@@ -64,8 +62,7 @@ automatically-unhide-macos-hidden-apps = true
     inner.vertical =   8
     outer.left =       8
     outer.bottom =     8
-    # The built-in display reserves 32px above tiling. Bar bottom=52px; add an 8px gap.
-    outer.top =        [{ monitor."built-in retina display" = 28 }, 60]
+    outer.top =        8
     outer.right =      8
 
 # 'main' binding mode declaration
@@ -125,12 +122,12 @@ automatically-unhide-macos-hidden-apps = true
     cmd-alt-ctrl-6 = 'workspace 6'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    cmd-alt-ctrl-shift-1 = ['move-node-to-workspace 1', 'exec-and-forget sketchybar --trigger space_windows_change']
-    cmd-alt-ctrl-shift-2 = ['move-node-to-workspace 2', 'exec-and-forget sketchybar --trigger space_windows_change']
-    cmd-alt-ctrl-shift-3 = ['move-node-to-workspace 3', 'exec-and-forget sketchybar --trigger space_windows_change']
-    cmd-alt-ctrl-shift-4 = ['move-node-to-workspace 4', 'exec-and-forget sketchybar --trigger space_windows_change']
-    cmd-alt-ctrl-shift-5 = ['move-node-to-workspace 5', 'exec-and-forget sketchybar --trigger space_windows_change']
-    cmd-alt-ctrl-shift-6 = ['move-node-to-workspace 6', 'exec-and-forget sketchybar --trigger space_windows_change']
+    cmd-alt-ctrl-shift-1 = 'move-node-to-workspace 1'
+    cmd-alt-ctrl-shift-2 = 'move-node-to-workspace 2'
+    cmd-alt-ctrl-shift-3 = 'move-node-to-workspace 3'
+    cmd-alt-ctrl-shift-4 = 'move-node-to-workspace 4'
+    cmd-alt-ctrl-shift-5 = 'move-node-to-workspace 5'
+    cmd-alt-ctrl-shift-6 = 'move-node-to-workspace 6'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     alt-tab = 'workspace-back-and-forth'

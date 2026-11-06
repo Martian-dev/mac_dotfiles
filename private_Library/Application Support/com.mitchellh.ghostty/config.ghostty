@@ -70,5 +70,8 @@ keybind = alt+9=text:\x1b9
 # Use tmux for tabs; native macOS tabs are incompatible with AeroSpace tiling.
 keybind = super+t=new_window
 
-# Keep terminal chrome minimal alongside SketchyBar and AeroSpace.
+# Keep terminal chrome minimal alongside AeroSpace.
 macos-titlebar-style = hidden
+
+window-padding-x = 12
+window-padding-y = 8

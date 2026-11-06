@@ -2,17 +2,21 @@
 
 macOS shell, terminal and desktop configuration managed with chezmoi. No encryption or password-manager integration is required. Only the selected configuration files are tracked; SSH keys, account tokens and session snapshots stay local.
 
+## Current desktop mode
+
+SketchyBar is paused and disabled at login; its configuration is retained for later. The native macOS menu bar stays visible. AeroSpace uses an 8px top gap below the system menu bar, and its SketchyBar callbacks are disabled. Ghostty has 12px horizontal and 8px vertical padding.
+
 ## Included
 
 - Zsh: the existing Starship prompt and aliases, Homebrew completions, fzf shell integration, fzf-tab, autosuggestions and syntax highlighting.
 - Ghostty: Everforest dark medium, hidden native titlebar, with Option+digits forwarded to tmux.
 - tmux: Everforest colors, default Ctrl+B prefix, default keybindings and zero-based window numbering. Option+0–9 switches windows. TPM, Resurrect and Continuum provide session saving/restoration.
-- AeroSpace: six persistent numbered workspaces, pybash1's shortcuts, bfpimentel's 8px gaps and horizontal tiling. The top gap accounts for the 44px bar plus display safe area, with 8px below the bar. Ghostty stays tiled alongside other apps. Command+T opens an independent terminal window; use tmux for tabs within a window.
+- AeroSpace: six persistent numbered workspaces, pybash1's shortcuts, bfpimentel's 8px gaps and horizontal tiling. All AeroSpace gaps are 8px while the native macOS menu bar is active. Ghostty stays tiled alongside other apps. Command+T opens an independent terminal window; use tmux for tabs within a window.
 - Karabiner: pybash1's Caps Lock → Command+Option+Control mapping, F4 → Escape, and Caps+D/N macros. His hardware-specific device entry is omitted.
-- SketchyBar: a persistent translation of bfpimentel's current Halo overview, with its 26pt clock, stacked weekday/date, 56px CPU sparkline, 30px battery ring and 26px workspace chips containing up to three native 14px app icons. Current app, media and compact audio controls remain available; click the output-device icon for its name.
+- SketchyBar (currently disabled): a persistent translation of bfpimentel's current Halo overview, with its 26pt clock, stacked weekday/date, 56px CPU sparkline, 30px battery ring and 26px workspace chips containing up to three native 14px app icons. Current app, media and compact audio controls remain available; click the output-device icon for its name.
 - JankyBorders: bfpimentel's thin rounded white active borders.
 
-The native macOS menu bar automatically hides to make room for SketchyBar; move the pointer to the top edge to access it. The Dock has a 1000-second reveal delay to prevent accidental bottom-edge popups. Undo the delay with `defaults delete com.apple.dock autohide-delay` followed by `killall Dock`.
+The native macOS menu bar stays visible; SketchyBar is currently stopped. The Dock has a 1000-second reveal delay to prevent accidental bottom-edge popups. Undo the delay with `defaults delete com.apple.dock autohide-delay` followed by `killall Dock`.
 
 ## Install on a Mac
 
@@ -60,7 +64,7 @@ Ghostty remains tiled. Command+T opens a separate Ghostty window, like Command+N
 
 macOS exposes Ghostty native tabs as separate windows to AeroSpace, which can leave blank tiled areas. This is a [documented Ghostty/macOS limitation](https://ghostty.org/docs/help/macos-tiling-wms), not a duplicate shortcut. The suggested force-tiling workaround was tested on this Mac and did not resolve it. The native New Tab menu action still exists; avoid it while Ghostty is tiled.
 
-## Desktop appearance
+## Saved SketchyBar appearance (currently disabled)
 
 The bar recreates the visual components in [bfpimentel's Overview.tsx](https://github.com/bfpimentel/dotfiles/blob/52702407aac544e08baada16f25d1c5c3806f466/dotfiles/halo/dashboard/Overview.tsx) using SketchyBar. The source uses Halo, so this is an implementation in a different bar, rather than an imported SketchyBar config. Numbered workspaces and your keybindings are preserved.
 
