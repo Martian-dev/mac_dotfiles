@@ -1,2 +1,4 @@
 #!/bin/bash
-sketchybar --set "$NAME" label="$(date '+%a %d %b  %H:%M')"
+sketchybar --set clock.time label="$(date '+%H:%M')" \
+  --set clock.day label="$(date '+%A')" \
+  --set clock.date label="$(date '+%-d %B')"

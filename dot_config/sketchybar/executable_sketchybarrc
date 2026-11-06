@@ -1,45 +1,110 @@
 #!/bin/bash
 export PATH="/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
+export CONFIG_DIR="${CONFIG_DIR:-$HOME/.config/sketchybar}"
+export CACHE_DIR="$HOME/.cache/sketchybar"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
+source "$CONFIG_DIR/colors.sh"
+mkdir -p "$CACHE_DIR"
+if [ ! -x "$CACHE_DIR/render" ] || [ "$CONFIG_DIR/helpers/render.swift" -nt "$CACHE_DIR/render" ]; then
+  "$CONFIG_DIR/helpers/compile.sh" || exit 1
+fi
+for symbol in speaker.wave.2.fill speaker.slash.fill headphones hifispeaker.fill music.note; do
+  [ -f "$CACHE_DIR/$symbol.png" ] || "$CACHE_DIR/render" symbol "$symbol" "$CACHE_DIR/$symbol.png"
+done
 
-# Adapted from bfpimentel's Halo palette and AeroSpace spacing.
-# https://github.com/bfpimentel/dotfiles/blob/main/dotfiles/halo/ui/theme.ts
-sketchybar --bar position=top height=28 margin=8 y_offset=4 \
-  color=0xf2141414 corner_radius=8 blur_radius=20 \
-  border_width=1 border_color=0xff414550 padding_left=8 padding_right=8 \
+# Translate the reference's Halo overview into a persistent SketchyBar:
+# 26pt clock, stacked date, 56px CPU sparkline, 30px battery ring,
+# 26px workspace chips with native 14px application icons.
+sketchybar --bar position=top height=44 margin=8 y_offset=8 \
+  color="$BAR_BG" corner_radius=9 blur_radius=20 \
+  border_width=1 border_color="$BORDER" padding_left=16 padding_right=12 \
   topmost=window sticky=on
 sketchybar --default icon.font='SF Pro:Semibold:12.0' \
-  label.font='SF Pro:Regular:12.0' icon.color=0xffd6d6d6 label.color=0xffe8e8e8 \
-  background.corner_radius=5 background.height=22 \
-  icon.padding_left=6 icon.padding_right=6 label.padding_left=4 label.padding_right=6 \
-  padding_left=2 padding_right=2
+  label.font='SF Pro:Regular:12.0' icon.color="$ACCENT" label.color="$FG" \
+  background.color=0x00000000 background.corner_radius=4 background.height=26 \
+  icon.padding_left=4 icon.padding_right=4 label.padding_left=0 label.padding_right=0 \
+  padding_left=0 padding_right=0
 sketchybar --add event aerospace_workspace_change
-for workspace in 1 2 3 4 5 6; do
-  sketchybar --add item "space.$workspace" left \
-    --set "space.$workspace" icon="$workspace" label.drawing=off \
-    background.color=0xffd6d6d6 background.drawing=off \
-    click_script="aerospace workspace $workspace" \
-    script="$PLUGIN_DIR/workspace.sh $workspace" \
-    --subscribe "space.$workspace" aerospace_workspace_change
- done
-sketchybar --add item front_app left --set front_app icon.drawing=off \
-  label.max_chars=30 script="$PLUGIN_DIR/front_app.sh" \
-  --subscribe front_app front_app_switched
-sketchybar --add item clock right --set clock icon.drawing=off \
-  update_freq=30 script="$PLUGIN_DIR/clock.sh" \
+sketchybar --add event space_windows_change
+
+sketchybar --add item clock.time left --set clock.time icon.drawing=off \
+  label.font='SF Pro:Bold:26.0' padding_right=10 \
+  update_freq=15 script="$PLUGIN_DIR/clock.sh" click_script='open -a Calendar'
+sketchybar --add item clock.day left --set clock.day icon.drawing=off \
+  label.font='SF Pro:Semibold:11.0' width=0 y_offset=7 \
   click_script='open -a Calendar'
-sketchybar --add item battery right --set battery icon='BAT' \
-  update_freq=60 script="$PLUGIN_DIR/battery.sh" \
+sketchybar --add item clock.date left --set clock.date icon.drawing=off \
+  label.font='SF Pro:Regular:11.0' label.color="$MUTED" width=92 y_offset=-7 \
+  click_script='open -a Calendar'
+sketchybar --add item cpu.label left --set cpu.label icon.drawing=off \
+  label.font='SF Pro:Semibold:10.0' width=0 y_offset=9
+sketchybar --add graph cpu.graph left 56 --set cpu.graph icon.drawing=off label.drawing=off \
+  graph.color="$MUTED" graph.fill_color=0x00000000 graph.line_width=1.5 \
+  background.drawing=on background.color=0x00000000 background.height=16 \
+  y_offset=-7 padding_right=14 update_freq=2 script="$PLUGIN_DIR/cpu.sh" \
+  click_script='open -a "Activity Monitor"'
+sketchybar --add item battery left --set battery icon.drawing=off label.drawing=off \
+  width=30 padding_right=18 background.height=30 background.drawing=on \
+  background.image.scale=0.5 update_freq=60 script="$PLUGIN_DIR/battery.sh" \
   --subscribe battery power_source_change system_woke
-sketchybar --add item volume right --set volume icon='VOL' \
-  script="$PLUGIN_DIR/volume.sh" \
+sketchybar --add item front_app.icon left --set front_app.icon icon.drawing=off label.drawing=off \
+  width=14 padding_right=6 background.image.scale=0.5
+sketchybar --add item front_app left --set front_app icon.drawing=off \
+  label.font='SF Pro:Medium:12.0' label.color="$MUTED" label.max_chars=24 \
+  label.padding_left=0 \
+  update_freq=5 script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched aerospace_workspace_change
+
+# Compact audio controls preserve the original functionality without text clutter.
+sketchybar --add item volume right --set volume icon.drawing=off \
+  label.font='SF Pro:Medium:11.0' label.padding_left=20 label.padding_right=2 \
+  background.image="$CACHE_DIR/speaker.wave.2.fill.png" background.image.scale=0.5 \
+  background.image.padding_right=28 script="$PLUGIN_DIR/volume.sh" \
   click_script='open /System/Library/PreferencePanes/Sound.prefPane' \
   --subscribe volume volume_change
-sketchybar --add item audio_device right --set audio_device icon.drawing=off \
-  label.max_chars=20 update_freq=10 script="$PLUGIN_DIR/audio_device.sh" \
-  click_script='open /System/Library/PreferencePanes/Sound.prefPane'
-sketchybar --add item media right --set media icon='PLAY' \
-  label.max_chars=32 script="$PLUGIN_DIR/media.sh" \
-  --subscribe media media_change
+sketchybar --add item audio_device right --set audio_device icon.drawing=off label.drawing=off \
+  width=20 padding_left=0 padding_right=0 \
+  background.image="$CACHE_DIR/headphones.png" background.image.scale=0.5 \
+  update_freq=10 script="$PLUGIN_DIR/audio_device.sh" \
+  popup.align=right popup.background.color="$BAR_BG" popup.background.border_color="$BORDER" \
+  popup.background.border_width=1 popup.background.corner_radius=9 \
+  popup.height=32 click_script='sketchybar --set audio_device popup.drawing=toggle'
+sketchybar --add item audio_device.name popup.audio_device --set audio_device.name \
+  icon.drawing=off padding_left=12 padding_right=12 label.color="$FG"
+
+sketchybar --add item audio.spacer right --set audio.spacer \
+  icon.drawing=off label.drawing=off width=14
+
+# Right-aligned chips match Overview.tsx; retain your numbered workspaces.
+for workspace in 6 5 4 3 2 1; do
+  sketchybar --add item "space.$workspace.gap" right --set "space.$workspace.gap" \
+    icon.drawing=off label.drawing=off width=6
+  members=("space.$workspace")
+  # Right items are laid out in reverse insertion order.
+  for index in 3 2 1; do
+    item="space.$workspace.app.$index"
+    members+=("$item")
+    sketchybar --add item "$item" right --set "$item" drawing=off \
+      icon.drawing=off label.drawing=off width=17 background.image.scale=0.5 \
+      background.height=26 click_script="aerospace workspace $workspace" \
+      script="$PLUGIN_DIR/hover.sh $workspace" \
+      --subscribe "$item" mouse.entered mouse.exited
+  done
+  sketchybar --add item "space.$workspace" right --set "space.$workspace" \
+    icon="$workspace" icon.font='SF Pro:Bold:12.0' icon.padding_left=8 icon.padding_right=8 \
+    label.drawing=off padding_left=0 \
+    click_script="aerospace workspace $workspace" script="$PLUGIN_DIR/hover.sh $workspace" \
+    --subscribe "space.$workspace" mouse.entered mouse.exited
+  sketchybar --add bracket "workspace.$workspace" "${members[@]}" \
+    --set "workspace.$workspace" background.drawing=on background.color="$CHIP" \
+    background.height=26 background.corner_radius=4
+ done
+sketchybar --add item workspace.refresh left --set workspace.refresh drawing=off \
+  update_freq=5 script="$PLUGIN_DIR/workspaces.sh" \
+  --subscribe workspace.refresh aerospace_workspace_change space_windows_change front_app_switched system_woke
+sketchybar --add item media center --set media drawing=off icon.drawing=off \
+  background.image="$CACHE_DIR/music.note.png" background.image.scale=0.5 \
+  background.image.padding_right=200 label.padding_left=22 label.max_chars=30 \
+  label.color="$MUTED" label.font='SF Pro:Regular:11.0' \
+  script="$PLUGIN_DIR/media.sh" --subscribe media media_change
 sketchybar --update

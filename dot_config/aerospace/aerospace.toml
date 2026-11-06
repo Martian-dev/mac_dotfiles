@@ -64,7 +64,8 @@ automatically-unhide-macos-hidden-apps = true
     inner.vertical =   8
     outer.left =       8
     outer.bottom =     8
-    outer.top =        40
+    # The built-in display reserves 32px above tiling. Bar bottom=52px; add an 8px gap.
+    outer.top =        [{ monitor."built-in retina display" = 28 }, 60]
     outer.right =      8
 
 # 'main' binding mode declaration

@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+# Rebuild native image renderer when its source changes:
+# {{ include "dot_config/sketchybar/helpers/render.swift" | sha256sum }}
+"$HOME/.config/sketchybar/helpers/compile.sh"

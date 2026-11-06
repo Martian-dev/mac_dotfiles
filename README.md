@@ -7,9 +7,9 @@ macOS shell, terminal and desktop configuration managed with chezmoi. No encrypt
 - Zsh: the existing Starship prompt and aliases, Homebrew completions, fzf shell integration, fzf-tab, autosuggestions and syntax highlighting.
 - Ghostty: Everforest dark medium, with Option+digits forwarded to tmux.
 - tmux: Everforest colors, default Ctrl+B prefix, default keybindings and zero-based window numbering. Option+0–9 switches windows. TPM, Resurrect and Continuum provide session saving/restoration.
-- AeroSpace: six persistent numbered workspaces, pybash1's shortcuts, bfpimentel's 8px gaps and horizontal tiling. A 40px top gap leaves room for SketchyBar. Ghostty stays tiled alongside other apps. Command+T opens an independent terminal window; use tmux for tabs within a window.
+- AeroSpace: six persistent numbered workspaces, pybash1's shortcuts, bfpimentel's 8px gaps and horizontal tiling. The top gap accounts for the 44px bar plus display safe area, with 8px below the bar. Ghostty stays tiled alongside other apps. Command+T opens an independent terminal window; use tmux for tabs within a window.
 - Karabiner: pybash1's Caps Lock → Command+Option+Control mapping, F4 → Escape, and Caps+D/N macros. His hardware-specific device entry is omitted.
-- SketchyBar: workspaces, current app, media, output device, volume, battery and clock. Dark gray translucent styling follows bfpimentel's current Halo palette; his current repo does not contain a SketchyBar config.
+- SketchyBar: a persistent translation of bfpimentel's current Halo overview, with its 26pt clock, stacked weekday/date, 56px CPU sparkline, 30px battery ring and 26px workspace chips containing up to three native 14px app icons. Current app, media and compact audio controls remain available; click the output-device icon for its name.
 - JankyBorders: bfpimentel's thin rounded white active borders.
 
 The native macOS menu bar automatically hides to make room for SketchyBar; move the pointer to the top edge to access it.
@@ -60,7 +60,17 @@ Ghostty remains tiled. Command+T opens a separate Ghostty window, like Command+N
 
 macOS exposes Ghostty native tabs as separate windows to AeroSpace, which can leave blank tiled areas. This is a [documented Ghostty/macOS limitation](https://ghostty.org/docs/help/macos-tiling-wms), not a duplicate shortcut. The suggested force-tiling workaround was tested on this Mac and did not resolve it. The native New Tab menu action still exists; avoid it while Ghostty is tiled.
 
-The desktop bar is a SketchyBar adaptation of bfpimentel's current Halo palette, not an exact copy of a historical desktop screenshot. Wallpaper, desktop widgets and Ghostty's native titlebar are independent visual settings.
+## Desktop appearance
+
+The bar recreates the visual components in [bfpimentel's Overview.tsx](https://github.com/bfpimentel/dotfiles/blob/52702407aac544e08baada16f25d1c5c3806f466/dotfiles/halo/dashboard/Overview.tsx) using SketchyBar. The source uses Halo, so this is an implementation in a different bar, rather than an imported SketchyBar config. Numbered workspaces and your keybindings are preserved.
+
+- Exact theme values: background `#141414f2`, foreground `#e8e8e8`, accent `#d6d6d6`, muted `#6b6b6b`.
+- Panel radius 9px with a subtle `#ffffff12` border. Workspace chips use radius 4px and `#ffffff08` backgrounds, with 6px between chips.
+- 8px AeroSpace gaps and thin rounded JankyBorders follow the reference. The built-in MacBook display's reserved 32px top area is included when calculating the gap below the bar.
+- Native app icons and SF Symbols are rendered locally through AppKit, with no downloaded icon assets. The battery ring and CPU sample data update live.
+- `helpers/render.swift` compiles into `~/.cache/sketchybar/render` when its source changes. Generated images and CPU samples also remain in that cache, outside Git. Homebrew's Xcode Command Line Tools provide Swift/AppKit; JetBrains Mono Nerd Font is included in the Brewfile.
+
+Wallpaper, desktop widgets and Ghostty's native titlebar are independent of this bar/window-manager styling.
 
 ## Update configs
 
