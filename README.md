@@ -12,7 +12,7 @@ macOS shell, terminal and desktop configuration managed with chezmoi. No encrypt
 - SketchyBar: a persistent translation of bfpimentel's current Halo overview, with its 26pt clock, stacked weekday/date, 56px CPU sparkline, 30px battery ring and 26px workspace chips containing up to three native 14px app icons. Current app, media and compact audio controls remain available; click the output-device icon for its name.
 - JankyBorders: bfpimentel's thin rounded white active borders.
 
-The native macOS menu bar automatically hides to make room for SketchyBar; move the pointer to the top edge to access it.
+The native macOS menu bar automatically hides to make room for SketchyBar; move the pointer to the top edge to access it. The Dock has a 1000-second reveal delay to prevent accidental bottom-edge popups. Undo the delay with `defaults delete com.apple.dock autohide-delay` followed by `killall Dock`.
 
 ## Install on a Mac
 
